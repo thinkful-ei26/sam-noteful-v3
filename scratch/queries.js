@@ -1,31 +1,31 @@
-'use strict';
+// 'use strict';
 
-const mongoose = require('mongoose');
-const { MONGODB_URI } = require('../config');
+// const mongoose = require('mongoose');
+// const { MONGODB_URI } = require('../config');
 
-const Note = require('../models/note');
+// const Note = require('../models/note');
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
-  .then(() => {
-    const searchTerm = 'lady gaga';
-    let filter = {};
+// mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
+//   .then(() => {
+//     const searchTerm = 'lady gaga';
+//     let filter = {};
 
-    if (searchTerm) {
-      filter.title = { $regex: searchTerm, $options: 'i' };
-    }
+//     if (searchTerm) {
+//       filter.title = { $regex: searchTerm, $options: 'i' };
+//     }
 
-    return Note.find(filter).sort({ updatedAt: 'desc' });
-  })
-  .then(results => {
-    console.log(results);
-  })
-  .then(() => {
-    return mongoose.disconnect()
-  })
-  .catch(err => {
-    console.error(`ERROR: ${err.message}`);
-    console.error(err);
-  });
+//     return Note.find(filter).sort({ updatedAt: 'desc' });
+//   })
+//   .then(results => {
+//     console.log(results);
+//   })
+//   .then(() => {
+//     return mongoose.disconnect()
+//   })
+//   .catch(err => {
+//     console.error(`ERROR: ${err.message}`);
+//     console.error(err);
+//   });
 
 //   mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
 //   .then(() => {
@@ -41,6 +41,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
 //     console.error(`ERROR: ${err.message}`);
 //     console.error(err);
 //   });
+
+
 // mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
 //   .then(() => {
 //     return Note.create({title:'i loooooove cats', content: 'they are sooo soft'});

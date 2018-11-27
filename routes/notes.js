@@ -1,50 +1,118 @@
 'use strict';
 
 const express = require('express');
-
 const router = express.Router();
+const mongoose = require('mongoose');
+const { MONGODB_URI } = require('../config');
+
+const Note = require('../models/note');
+
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-
-  console.log('Get All Notes');
-  res.json([
-    { id: 1, title: 'Temp 1' },
-    { id: 2, title: 'Temp 2' },
-    { id: 3, title: 'Temp 3' }
-  ]);
+  const searchTerm = req.query.searchTerm;
+  let filter = { };
+  
+  Note.find()
+    .then(() => {
+      if (searchTerm) {
+        filter.title = { $regex: searchTerm, $options: 'i' };
+        
+      }
+      return Note.find(filter).sort({ updatedAt: 'desc' });
+    })
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(`ERROR: ${err.message}`);
+      console.error(err);
+    });
+  //console.log('Get All Notes');
 
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
-
-  console.log('Get a Note');
-  res.json({ id: 1, title: 'Temp 1' });
+  const id = req.params.id;
+  Note.findById()
+    .then(() => {
+      return Note.findById(id);
+    })
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(`ERROR: ${err.message}`);
+      console.error(err);
+    });
 
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-
-  console.log('Create a Note');
-  res.location('path/to/new/document').status(201).json({ id: 2, title: 'Temp 2' });
-
+  const requiredFields = ['title', 'content'];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  Note.create({
+    title: req.body.title,
+    content: req.body.content
+  })
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(`ERROR: ${err.message}`);
+      console.error(err);
+    });
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
+  const id = req.params.id;
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    const message =
+      `Request path id (${req.params.id}) and request body id ` +
+      `(${req.body.id}) must match`;
+    console.error(message);
+    return res.status(400).json({ message: message });
+  }
+  const toUpdate = {};
+  const updateableFields = ['title', 'content'];
 
-  console.log('Update a Note');
-  res.json({ id: 1, title: 'Updated Temp 1' });
-
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+  Note
+    .findByIdAndUpdate(id ,
+      { $set: toUpdate }, 
+      { new: true, upsert: true })
+    
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      console.error(`ERROR: ${err.message}`);
+      console.error(err);
+    });
 });
+
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-
-  console.log('Delete a Note');
-  res.status(204).end();
+  const id = req.params.id;
+ 
+  Note
+    .findByIdAndDelete(id)
+    .then(res.status(204).end());
 });
 
 module.exports = router;
