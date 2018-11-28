@@ -12,15 +12,20 @@ const Note = require('../models/note');
 router.get('/', (req, res, next) => {
   const searchTerm = req.query.searchTerm;
   let filter = { };
+  let or;
+  if (searchTerm) { 
+    or = {
+      $or: [
+        {title:{$regex: searchTerm, $options: 'i'}},
+        {content:{$regex: searchTerm, $options: 'i'}}
+      ]
+    };
+  }
   
-  Note.find()
-    .then(() => {
-      if (searchTerm) {
-        filter.title = { $regex: searchTerm, $options: 'i' };
-        
-      }
-      return Note.find(filter).sort({ updatedAt: 'desc' });
-    })
+  console.log(or);
+  Note
+    .find(or)
+    .sort({ updatedAt: 'desc' })
     .then(results => {
       res.json(results);
     })
@@ -35,10 +40,8 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
-  Note.findById()
-    .then(() => {
-      return Note.findById(id);
-    })
+  Note
+    .findById(id)
     .then(results => {
       res.json(results);
     })
