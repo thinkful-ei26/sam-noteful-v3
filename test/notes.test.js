@@ -71,7 +71,7 @@ describe('Notes API resource', function() {
           expect(res.body).to.have.length(1);
           res.body.forEach( (note, i) => {
             expect(note).to.be.a('object');
-            expect(note).to.include.all.keys('id', 'title', 'createdAt', 'updatedAt','folderId');
+            expect(note).to.include.all.keys('id', 'title', 'createdAt', 'updatedAt','folderId', 'tags');
             expect(note.id).to.equal(data[i].id);
             expect(note.title).to.equal(data[i].title);
             expect(note.content).to.equal(data[i].content);
@@ -95,7 +95,7 @@ describe('Notes API resource', function() {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId', 'tags');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.content).to.equal(data.content);
@@ -131,7 +131,7 @@ describe('Notes API resource', function() {
           expect(res).to.have.header('location');
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId', 'tags');
           return Note.findById(res.body.id);
         })
         .then(note => {
@@ -178,7 +178,7 @@ describe('Notes API resource', function() {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt','folderId', 'tags');
           return Note.findById(res.body.id);
         })
         .then( data => {

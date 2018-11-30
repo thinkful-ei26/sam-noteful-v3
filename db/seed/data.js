@@ -16,13 +16,15 @@ const notes = [
     '_id': '000000000000000000000002',
     'title': "The most boring article about cats you'll ever read",
     'content': 'Lorem ipsum dolor sit ame',
-    'folderId': '111111111111111111111100'
+    'folderId': '111111111111111111111100',
+    "tags": ["222222222222222222222200", "222222222222222222222201", "222222222222222222222202"]
   },
   {
     '_id': '000000000000000000000003',
     'title': '7 things Lady Gaga has in common with cats',
     'content': 'Posuere sollicitudin aliquam  .',
-    'folderId': '111111111111111111111103'
+    'folderId': '111111111111111111111103',
+    "tags": ["222222222222222222222200", "222222222222222222222201"]
   },
   {
     '_id': '000000000000000000000004',
@@ -33,7 +35,8 @@ const notes = [
     '_id': '000000000000000000000005',
     'title': '10 ways cats can help you live to 100',
     'content': 'Posuere sollicitudin aliquam u.',
-    'folderId': '111111111111111111111102'
+    'folderId': '111111111111111111111102',
+    "tags": ["222222222222222222222200", "222222222222222222222201"]
   },
   {
     '_id': '000000000000000000000006',
@@ -45,7 +48,9 @@ const notes = [
     '_id': '000000000000000000000007',
     'title': '10 ways marketers are making you addicted to cats',
     'content': 'Posuere sollicitudin aliquam ultrices s',
-    'folderId': '111111111111111111111100'
+    'folderId': '111111111111111111111100',
+    "tags": ["222222222222222222222201", "222222222222222222222202"]
+    
   }
 ];
 
@@ -68,4 +73,23 @@ const folders = [
   }
 ];
 
-module.exports = { notes, folders };
+const tags = [
+  {
+    "_id": "222222222222222222222200",
+    "name": "breed"
+  },
+  {
+    "_id": "222222222222222222222201",
+    "name": "hybrid"
+  },
+  {
+    "_id": "222222222222222222222202",
+    "name": "domestic"
+  },
+  {
+    "_id": "222222222222222222222203",
+    "name": "feral"
+  }
+]
+
+module.exports = { notes, folders, tags };
